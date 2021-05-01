@@ -92,20 +92,28 @@ class Game extends React.Component {
         const xy = ["1, 1", "1, 2", "1, 3",
                     "2, 1", "2, 2", "2, 3",
                     "3, 1", "3, 2", "3, 3"]
-
-        console.log(location)
         const moves = history.map((step, move) => {
             const desc = move ?
                 'Go to move #' + move + " ---> x, y (" + xy[location[move - 1]] + ")":
                 'Go to game start';
+                if (move === history.length - 1) {
+                    return (
+                        <li key={move}>
+                            <button style={{fontWeight: "bold"}} onClick={() => this.jumpTo(move)}>
+                                {desc}
+                            </button>
+                        </li>
+                    );
+                } else {
+                    return (
+                        <li key={move}>
+                            <button onClick={() => this.jumpTo(move)}>
+                                {desc}
+                            </button>
+                        </li>
+                    );
+                }
                 
-                return (
-                    <li key={move}>
-                        <button onClick={() => this.jumpTo(move)}>
-                            {desc}
-                        </button>
-                    </li>
-                );
         });
         let status;
         if (winner) {
@@ -113,7 +121,6 @@ class Game extends React.Component {
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
-        //console.log(this.state.history);
         return (
             <div className="game">
                 <div className="game-board">
