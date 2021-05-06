@@ -72,7 +72,10 @@ class Game extends React.Component {
             stepNumber: 0,
             xIsNext: true,
             stepLocations: [],
+            reverse: false,
         }
+
+        this.handleReverse = this.handleReverse.bind(this);
     }
 
     handleClick(i) {
@@ -101,6 +104,10 @@ class Game extends React.Component {
         });
     }
 
+    handleReverse() {
+        this.setState({ reverse: !this.state.reverse });
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -109,7 +116,7 @@ class Game extends React.Component {
         const xy = ["1, 1", "1, 2", "1, 3",
                     "2, 1", "2, 2", "2, 3",
                     "3, 1", "3, 2", "3, 3"]
-        const moves = history.map((step, move) => {
+        var moves = history.map((step, move) => {
             const desc = move ?
                 'Go to move #' + move + " ---> x, y (" + xy[location[move - 1]] + ")":
                 'Go to game start';
@@ -138,6 +145,11 @@ class Game extends React.Component {
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
+
+        if (this.state.reverse) {
+            moves = moves.reverse();
+        }
+
         return (
             <div className="game">
                 <div className="game-board">
@@ -149,6 +161,9 @@ class Game extends React.Component {
                 <div className="game-info">
                     <div>{status}</div>
                     <ol>{moves}</ol>
+                </div>
+                <div>
+                    <button onClick={this.handleReverse}>Reverse</button>
                 </div>
             </div>
         )
