@@ -124,25 +124,21 @@ class Game extends React.Component {
                 + xy[location[move - 1]]
                 + ")":
                 'Go to game start';
+            var bold;
             if (move === history.length - 1) {
-                return (
-                    <li key={move}>
-                        <button
-                        style={{fontWeight: "bold"}}
-                        onClick={() => this.jumpTo(move)}>
-                            {desc}
-                        </button>
-                    </li>
-                );
+                bold = {fontWeight: "bold"};
             } else {
-                return (
-                    <li key={move}>
-                        <button onClick={() => this.jumpTo(move)}>
-                            {desc}
-                        </button>
-                    </li>
-                );
+                bold = {};
             }
+            return (
+                <li key={move}>
+                    <button
+                    style={bold}
+                    onClick={() => this.jumpTo(move)}>
+                        {desc}
+                    </button>
+                </li>
+            );
                 
         });
         let status;
@@ -150,7 +146,8 @@ class Game extends React.Component {
         if (winner) {
             status = 'Winner: ' + winner.win;
             winningSquares = winner.winSquares;
-            /* console.log(winningSquares); */
+        } else if (!winner && !current.squares.includes(null)) {
+            status = 'Draw'
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
