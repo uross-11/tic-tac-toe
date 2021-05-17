@@ -3,25 +3,43 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+    let myStyle = {};
+    if (props.win === true) {
+        myStyle = {
+            backgroundColor: "green"
+        }
+    }
+
     return(
         <button
             className="square"
+            style={myStyle}
             onClick={props.onClick}
         >
             {props.value}
         </button>
     );
+    
 }
 
 class Board extends React.Component {
 
     renderSquare(i) {
+        let win;
+        if (this.props.win && this.props.win.includes(i)) {
+            win = true;
+        } else {
+            win = false;
+        }
+
         return (
             <Square
+                win={win}
                 key={i}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
             />);
+        
     }
 
     createSquares() {
@@ -128,10 +146,11 @@ class Game extends React.Component {
                 
         });
         let status;
+        let winningSquares;
         if (winner) {
             status = 'Winner: ' + winner.win;
-            const winningSquares = winner.winSquares;
-            console.log(winningSquares)
+            winningSquares = winner.winSquares;
+            /* console.log(winningSquares); */
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
@@ -144,6 +163,7 @@ class Game extends React.Component {
             <div className="game">
                 <div className="game-board">
                     <Board
+                        win={winningSquares}
                         squares={current.squares}
                         onClick={(i) => this.handleClick(i)}
                     />
